@@ -1,0 +1,44 @@
+<html>
+
+<head>
+    <title>Home</title>
+    <script>
+        var Module = {
+            onRuntimeInitialized: async function () {
+                console.log("WASM Loaded");
+
+                const response = await fetch("http://localhost:5001/api/extra/get_vocab");
+                const response_json = await response.json();
+                console.log('Got vocab:', response_json);
+                const vocab_b64 = response_json.vocab;
+
+                const vocab_array = Uint8Array.from(atob(vocab_b64), c => c.charCodeAt(0))
+
+                console.log('Loading vocab...');
+                const result = Module.load_vocab(vocab_array);
+                console.log('Loaded:', result);
+
+                const test_strings = [
+                    "Hello World",
+                    " Hello World",
+                    " Hello World!",
+                    " this is 🦙.cpp",
+                    "w048 7tuijk dsdfhu",
+                    "нещо на Български",
+                ];
+                test_strings.forEach(test_string => {
+                    console.log('Tokenizing:', test_string);
+                    const tokens = Module.llama_tokenize(test_string, true);
+                    console.log('Tokens:', tokens);
+                });
+            }
+        };
+    </script>
+    <script src="./build/kcpp_tokenizers.js"></script>
+</head>
+
+<body>
+
+</body>
+
+</html>
