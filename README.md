@@ -13,3 +13,20 @@ The js will probably drop to single digits if you can get closure working proper
 Also, the wasm could be further reduced by pulling out the current use of -lembind.
 
 Various TODOs are sprinkled throughout.
+
+## Building
+
+Needs cmake and emscripten: https://emscripten.org/docs/getting_started/downloads.html
+
+Then:
+
+```
+mkdir build
+cd build
+emcmake cmake ..
+cmake --build .
+```
+
+_(note, `emcmake` is emscripten's wrapper for cmake, it'll configure cmake to build with the emscripten toolchain)_
+
+You should then end up with `kcpp_tokenizers.js` and `kcpp_tokenizers.wasm` in the `build/` dir. See `index.html` on how to use it.
